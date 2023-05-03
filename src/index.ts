@@ -9,19 +9,24 @@ config();
 const PORT = process.env.PORT;
 
 createServer((request, response) => {
-  response.setHeader("Content-Type", "application/json");
-  const { method, url } = request;
+  try {
+    response.setHeader("Content-Type", "application/json");
+    const { method, url } = request;
 
-  if (method === "GET") {
-    return getHandler({ request, response, url });
-  }
-  if (method === "POST") {
-    return postHandler({ request, response, url });
-  }
-  if (method === "PUT") {
-    return putHandler({ request, response, url });
-  }
-  if (method === "DELETE") {
-    return deleteHandler({ request, response, url });
+    if (method === "GET") {
+      return getHandler({ request, response, url });
+    }
+    if (method === "POST") {
+      return postHandler({ request, response, url });
+    }
+    if (method === "PUT") {
+      return putHandler({ request, response, url });
+    }
+    if (method === "DELETE") {
+      return deleteHandler({ request, response, url });
+    }
+  } catch (err) {
+    response.statusCode = 500;
+    response.end("Error: unexpected server error");
   }
 }).listen(PORT);
