@@ -11,6 +11,12 @@ const usersObject: IUsersObject = {
   createNewUser(user) {
     this._allUsers.push(user);
   },
+  updateUser(user) {
+    this._allUsers.push(user);
+  },
+  deleteUser(id) {
+    this._allUsers = this._allUsers.filter((user) => user.id !== id);
+  },
 };
 
 export default usersObject;
