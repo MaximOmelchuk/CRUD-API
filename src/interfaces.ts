@@ -24,3 +24,8 @@ export interface IUsersObject {
   updateUser: (id: string, user: IRequestUser) => void;
   deleteUser: (id: string) => void;
 }
+
+export interface ICheckIsExistArgs {
+  response: ServerResponse<IncomingMessage>;
+  url: string | undefined;
+}

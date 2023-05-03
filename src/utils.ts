@@ -1,4 +1,8 @@
-const checkIsReceivedUserValid = (body: any): boolean => {
+import { validate } from "uuid";
+import { ICheckIsExistArgs, IGetHandlerArgs } from "./interfaces";
+import usersObject from "./usersObject";
+
+export const checkIsReceivedUserValid = (body: any): boolean => {
   return (
     "username" in body &&
     typeof body.username === "string" &&
@@ -11,4 +15,20 @@ const checkIsReceivedUserValid = (body: any): boolean => {
   );
 };
 
-export default  checkIsReceivedUserValid;
+export const checkIsUserWithIdExist = ({
+  url,
+  response,
+}: ICheckIsExistArgs) => {
+  const requestId = url!.replace(/^\/users\//, "");
+  const user = usersObject.getOneUser(requestId);
+  if (!validate(requestId)) {
+    response.statusCode = 400;
+    response.end("ID is not valid");
+  } else if (!user) {
+    response.statusCode = 404;
+    response.end("User with this ID does not exist");
+    return false;
+  } else {
+    return user;
+  }
+};
