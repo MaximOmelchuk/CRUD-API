@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 import { createServer } from "http";
+import deleteHandler from "./methods/deleteHandler";
 import getHandler from "./methods/getHandler";
 import postHandler from "./methods/postHandler";
 import putHandler from "./methods/putHandler";
@@ -19,5 +20,8 @@ createServer((request, response) => {
   }
   if (method === "PUT") {
     return putHandler({ request, response, url });
+  }
+  if (method === "DELETE") {
+    return deleteHandler({ request, response, url });
   }
 }).listen(PORT);
