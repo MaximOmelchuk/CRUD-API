@@ -2,7 +2,7 @@ import { IUser } from "../interfaces";
 import { v4 } from "uuid";
 import { IGetHandlerArgs, IRequestUser } from "../interfaces";
 import usersObject from "../usersObject";
-import { checkIsReceivedUserValid } from "../utils";
+import { checkIsReceivedUserValid, nonExistEndpointHandler } from "../utils";
 
 const postHandler = ({ request, response, url }: IGetHandlerArgs) => {
   if (url === "/users") {
@@ -25,6 +25,7 @@ const postHandler = ({ request, response, url }: IGetHandlerArgs) => {
       }
     });
   }
+  return nonExistEndpointHandler(response);
 };
 
 export default postHandler;

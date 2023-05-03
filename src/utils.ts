@@ -1,3 +1,4 @@
+import { IncomingMessage, ServerResponse } from "http";
 import { validate } from "uuid";
 import { ICheckIsExistArgs, IGetHandlerArgs } from "./interfaces";
 import usersObject from "./usersObject";
@@ -31,4 +32,11 @@ export const checkIsUserWithIdExist = ({
   } else {
     return user;
   }
+};
+
+export const nonExistEndpointHandler = (
+  response: ServerResponse<IncomingMessage>
+) => {
+  response.statusCode = 404;
+  response.end("Error: endpoint is not exist");
 };

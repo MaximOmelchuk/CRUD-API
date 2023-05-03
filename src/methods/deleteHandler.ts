@@ -1,3 +1,4 @@
+import { nonExistEndpointHandler } from "./../utils";
 import { IGetHandlerArgs } from "../interfaces";
 import usersObject from "../usersObject";
 import { checkIsUserWithIdExist } from "../utils";
@@ -11,6 +12,7 @@ const deleteHandler = (props: IGetHandlerArgs) => {
     response.statusCode = 204;
     return response.end();
   }
+  return nonExistEndpointHandler(response);
 };
 
 export default deleteHandler;

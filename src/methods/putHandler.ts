@@ -1,3 +1,4 @@
+import { nonExistEndpointHandler } from "./../utils";
 import { IGetHandlerArgs, IRequestUser } from "../interfaces";
 import usersObject from "../usersObject";
 import { checkIsReceivedUserValid, checkIsUserWithIdExist } from "../utils";
@@ -25,6 +26,7 @@ const putHandler = (props: IGetHandlerArgs) => {
       }
     });
   }
+  return nonExistEndpointHandler(response);
 };
 
 export default putHandler;
