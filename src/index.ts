@@ -26,6 +26,7 @@ createServer((request, response) => {
       return deleteHandler({ request, response, url });
     }
   } catch (err) {
+    console.log(err);
     response.statusCode = 500;
     response.end("Error: unexpected server error");
   }

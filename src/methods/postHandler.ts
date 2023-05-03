@@ -24,8 +24,9 @@ const postHandler = ({ request, response, url }: IGetHandlerArgs) => {
         return response.end("User should contain all required fields");
       }
     });
+  } else {
+    return nonExistEndpointHandler(response);
   }
-  return nonExistEndpointHandler(response);
 };
 
 export default postHandler;
