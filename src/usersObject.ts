@@ -1,4 +1,4 @@
-import { IUsersObject } from "./interfaces";
+import { IUser, IUsersObject } from "./interfaces";
 
 const usersObject: IUsersObject = {
   _allUsers: [],
@@ -11,8 +11,10 @@ const usersObject: IUsersObject = {
   createNewUser(user) {
     this._allUsers.push(user);
   },
-  updateUser(user) {
-    this._allUsers.push(user);
+  updateUser(id, user) {
+    const index = this._allUsers.findIndex((item) => item.id === id);
+    const updatedUser = { ...this._allUsers[index], ...user };
+    this._allUsers[index] = updatedUser;
   },
   deleteUser(id) {
     this._allUsers = this._allUsers.filter((user) => user.id !== id);

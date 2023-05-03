@@ -21,6 +21,6 @@ export interface IUsersObject {
   getAllUsers: () => IUser[];
   getOneUser: (id: string) => IUser | undefined;
   createNewUser: (user: IUser) => void;
-  updateUser: (user: IUser) => void;
+  updateUser: (id: string, user: IRequestUser) => void;
   deleteUser: (id: string) => void;
 }
