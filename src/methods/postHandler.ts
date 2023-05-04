@@ -5,7 +5,7 @@ import usersObject from "../usersObject";
 import { checkIsReceivedUserValid, nonExistEndpointHandler } from "../utils";
 
 const postHandler = ({ request, response, url }: IGetHandlerArgs) => {
-  if (url === "/users") {
+  if (url === "api/users") {
     let chunkArr: Uint8Array[] = [];
     request.on("data", (chunk) => {
       chunkArr.push(chunk);

@@ -5,7 +5,7 @@ import { checkIsReceivedUserValid, checkIsUserWithIdExist } from "../utils";
 
 const putHandler = (props: IGetHandlerArgs) => {
   const { request, response, url } = props;
-  if (url?.startsWith("/users/")) {
+  if (url?.startsWith("api/users/")) {
     const user = checkIsUserWithIdExist(props);
     if (!user) return;
     const chunkArr: Uint8Array[] = [];
