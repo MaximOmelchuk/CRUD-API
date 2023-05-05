@@ -8,7 +8,7 @@ import putHandler from "./methods/putHandler";
 config();
 const PORT = process.env.PORT;
 
-createServer((request, response) => {
+const server = createServer((request, response) => {
   try {
     response.setHeader("Content-Type", "application/json");
     const { method, url } = request;
@@ -30,4 +30,7 @@ createServer((request, response) => {
     response.statusCode = 500;
     response.end("Error: unexpected server error");
   }
-}).listen(PORT);
+});
+const runningServer = server.listen(PORT);
+
+export { runningServer, server };
