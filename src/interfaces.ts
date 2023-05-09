@@ -14,10 +14,12 @@ export interface IGetHandlerArgs {
   request: IncomingMessage;
   response: ServerResponse<IncomingMessage>;
   url: string | undefined;
+  users?: IUser[];
 }
 
 export interface IUsersObject {
   _allUsers: IUser[];
+  setAllUsers: (users: IUser[]) => void;
   getAllUsers: () => IUser[];
   getOneUser: (id: string) => IUser | undefined;
   createNewUser: (user: IUser) => void;

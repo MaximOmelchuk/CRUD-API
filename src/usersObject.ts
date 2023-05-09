@@ -2,6 +2,9 @@ import { IUser, IUsersObject } from "./interfaces";
 
 const usersObject: IUsersObject = {
   _allUsers: [],
+  setAllUsers(users) {
+    this._allUsers = users
+  },
   getAllUsers() {
     return this._allUsers;
   },
