@@ -1,3 +1,4 @@
+import { Worker } from "cluster";
 import { IncomingMessage, ServerResponse } from "http";
 
 export interface IRequestUser {
@@ -15,6 +16,7 @@ export interface IGetHandlerArgs {
   response: ServerResponse<IncomingMessage>;
   url: string | undefined;
   users?: IUser[];
+  updateUsersCallback: (users: IUser[]) => void;
 }
 
 export interface IUsersObject {
@@ -30,4 +32,8 @@ export interface IUsersObject {
 export interface ICheckIsExistArgs {
   response: ServerResponse<IncomingMessage>;
   url: string | undefined;
+}
+
+export interface IWorkersObj {
+  [key: string]: Worker;
 }

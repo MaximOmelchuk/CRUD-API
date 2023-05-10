@@ -4,7 +4,11 @@ import { IGetHandlerArgs, IRequestUser } from "../interfaces";
 import usersObject from "../usersObject";
 import { checkIsReceivedUserValid, nonExistEndpointHandler } from "../utils";
 
-const postHandler = ({ request, response, url }: IGetHandlerArgs) => {
+const postHandler = (props: IGetHandlerArgs) => {
+  const { request, response, url, users, updateUsersCallback } = props;
+  if (users) {
+    usersObject.setAllUsers(users);
+  }
   if (url === "/api/users") {
     let chunkArr: Uint8Array[] = [];
     request.on("data", (chunk) => {
@@ -17,15 +21,17 @@ const postHandler = ({ request, response, url }: IGetHandlerArgs) => {
       if (isValid) {
         const userData: IUser = { id: v4(), ...responseData };
         usersObject.createNewUser(userData);
+
         response.statusCode = 201;
-        return response.end(JSON.stringify(userData));
+        response.end(JSON.stringify(userData));
       } else {
         response.statusCode = 400;
-        return response.end("User should contain all required fields");
+        response.end("User should contain all required fields");
       }
+      updateUsersCallback(usersObject.getAllUsers());
     });
   } else {
-    return nonExistEndpointHandler(response);
+    nonExistEndpointHandler(response);
   }
 };
 
