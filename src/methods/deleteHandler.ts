@@ -14,7 +14,7 @@ const deleteHandler = (props: IGetHandlerArgs) => {
     usersObject.deleteUser(user.id);
     response.statusCode = 204;
     response.end();
-    updateUsersCallback(usersObject.getAllUsers());
+    if (updateUsersCallback) updateUsersCallback(usersObject.getAllUsers());
   } else {
     nonExistEndpointHandler(response);
   }

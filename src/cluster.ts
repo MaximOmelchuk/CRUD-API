@@ -11,6 +11,8 @@ import putHandler from "./methods/putHandler";
 import usersObject from "./usersObject";
 import { IUser, IWorkersObj } from "./interfaces";
 
+console.log(process.argv);
+
 if (cluster.isPrimary) {
   const numCPUs = cpus().length;
   let count = 1;
@@ -29,12 +31,11 @@ if (cluster.isPrimary) {
       users = usersFromChild;
     });
   }
-  process.on("beforeExit", () => {
+  process.on("SIGINT", () => {
     Object.values(workers).forEach((worker) => {
       worker.kill();
     });
   });
-  // console.log(workers);
   createServer((request, response) => {
     const { url, method } = request;
     const primaryChunkArr: Uint8Array[] = [];

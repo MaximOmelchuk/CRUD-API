@@ -27,7 +27,7 @@ const putHandler = (props: IGetHandlerArgs) => {
         response.statusCode = 400;
         response.end("User should contain all required fields");
       }
-      updateUsersCallback(usersObject.getAllUsers());
+      if (updateUsersCallback) updateUsersCallback(usersObject.getAllUsers());
     });
   } else {
     nonExistEndpointHandler(response);

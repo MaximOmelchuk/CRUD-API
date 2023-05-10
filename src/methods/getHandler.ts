@@ -20,7 +20,7 @@ const getHandler = (props: IGetHandlerArgs) => {
   } else {
     nonExistEndpointHandler(response);
   }
-  updateUsersCallback(usersObject.getAllUsers());
+  if (updateUsersCallback) updateUsersCallback(usersObject.getAllUsers());
 };
 
 export default getHandler;
