@@ -4,8 +4,11 @@ import usersObject from "../usersObject";
 import { checkIsReceivedUserValid, checkIsUserWithIdExist } from "../utils";
 
 const putHandler = (props: IGetHandlerArgs) => {
-  const { request, response, url } = props;
-  if (url?.startsWith("api/users/")) {
+  const { request, response, url, users, updateUsersCallback } = props;
+  if (users) {
+    usersObject.setAllUsers(users);
+  }
+  if (url?.startsWith("/api/users/")) {
     const user = checkIsUserWithIdExist(props);
     if (!user) return;
     const chunkArr: Uint8Array[] = [];
@@ -19,14 +22,16 @@ const putHandler = (props: IGetHandlerArgs) => {
       if (isValid) {
         usersObject.updateUser(user.id, requestData);
         response.statusCode = 200;
-        return response.end(JSON.stringify(usersObject.getOneUser(user.id)));
+        response.end(JSON.stringify(usersObject.getOneUser(user.id)));
       } else {
         response.statusCode = 400;
-        return response.end("User should contain all required fields");
+        response.end("User should contain all required fields");
       }
+      updateUsersCallback(usersObject.getAllUsers());
     });
+  } else {
+    nonExistEndpointHandler(response);
   }
-  return nonExistEndpointHandler(response);
 };
 
 export default putHandler;

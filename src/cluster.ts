@@ -26,10 +26,14 @@ if (cluster.isPrimary) {
     });
     workers[i] = worker;
     worker.on("message", (usersFromChild: IUser[]) => {
-      console.log(usersFromChild, "----usersFromChild");
       users = usersFromChild;
     });
   }
+  process.on("beforeExit", () => {
+    Object.values(workers).forEach((worker) => {
+      worker.kill();
+    });
+  });
   // console.log(workers);
   createServer((request, response) => {
     const { url, method } = request;
@@ -67,6 +71,7 @@ if (cluster.isPrimary) {
         });
         res.on("end", () => {
           response.setHeader("Content-Type", "application/json");
+          response.statusCode = res.statusCode || 200;
           response.end(respChunkArr.join(""));
         });
       });
@@ -109,9 +114,6 @@ if (cluster.isPrimary) {
       console.log(err);
       response.statusCode = 500;
       response.end("Error: unexpected server error");
-      // } finally {
-      //   console.log(users, "---users finally");
-      //   if (process.send) process.send(users);
     }
   });
   const runningServer = server.listen(workerPort);

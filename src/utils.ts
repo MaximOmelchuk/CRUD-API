@@ -20,7 +20,7 @@ export const checkIsUserWithIdExist = ({
   url,
   response,
 }: ICheckIsExistArgs) => {
-  const requestId = url!.replace(/^\/users\//, "");
+  const requestId = url!.replace(/^\/api\/users\//, "");
   const user = usersObject.getOneUser(requestId);
   if (!validate(requestId)) {
     response.statusCode = 400;

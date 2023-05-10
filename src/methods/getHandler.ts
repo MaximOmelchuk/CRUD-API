@@ -3,7 +3,7 @@ import usersObject from "../usersObject";
 import { checkIsUserWithIdExist, nonExistEndpointHandler } from "../utils";
 
 const getHandler = (props: IGetHandlerArgs) => {
-  const { request, response, url, users, updateUsersCallback } = props;
+  const { response, url, users, updateUsersCallback } = props;
   if (users) {
     usersObject.setAllUsers(users);
   }

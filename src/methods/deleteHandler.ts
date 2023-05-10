@@ -4,15 +4,20 @@ import usersObject from "../usersObject";
 import { checkIsUserWithIdExist } from "../utils";
 
 const deleteHandler = (props: IGetHandlerArgs) => {
-  const { request, response, url } = props;
-  if (url?.startsWith("api/users/")) {
+  const { response, url, users, updateUsersCallback } = props;
+  if (users) {
+    usersObject.setAllUsers(users);
+  }
+  if (url?.startsWith("/api/users/")) {
     const user = checkIsUserWithIdExist(props);
     if (!user) return;
     usersObject.deleteUser(user.id);
     response.statusCode = 204;
-    return response.end();
+    response.end();
+    updateUsersCallback(usersObject.getAllUsers());
+  } else {
+    nonExistEndpointHandler(response);
   }
-  return nonExistEndpointHandler(response);
 };
 
 export default deleteHandler;
