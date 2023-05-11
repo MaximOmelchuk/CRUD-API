@@ -16,7 +16,7 @@ export interface IGetHandlerArgs {
   response: ServerResponse<IncomingMessage>;
   url: string | undefined;
   users?: IUser[];
-  updateUsersCallback: (users: IUser[]) => void;
+  updateUsersCallback?: (users: IUser[]) => void;
 }
 
 export interface IUsersObject {

@@ -11,7 +11,7 @@ import putHandler from "./methods/putHandler";
 import usersObject from "./usersObject";
 import { IUser, IWorkersObj } from "./interfaces";
 
-console.log(process.argv);
+console.log(process.argv[2]?.slice(2));
 
 if (cluster.isPrimary) {
   const numCPUs = cpus().length;
@@ -79,10 +79,6 @@ if (cluster.isPrimary) {
       req.end();
     });
   }).listen(PORT);
-
-  // cluster.on("exit", (worker, code, signal) => {
-  //   console.log(`worker ${worker.process.pid} died`);
-  // });
 } else {
   const workerPort = process.env.workerPort;
   const isMult = !!process.env.isMult;
