@@ -3,81 +3,79 @@ import { server as serverInstance, runningServer } from "../src";
 import { describe, expect, test, it, afterAll, beforeAll } from "@jest/globals";
 import http from "http";
 import supertest from "supertest";
+import { validate } from "uuid";
 
-// import { describe, it } from "node:test";
-// import assert from "node:assert/strict";
-// import { expect } from "expect";
-// import http from "http";
-// const PORT = process.env.PORT || 8000;
-// const mockedServer = request(app);
-// console.log(typeof app);
-// const server = request(serverInstance);
-// afterAll(async () => {
+const dummyUser = {
+  username: "Alice",
+  age: 2,
+  hobbies: ["eat", "sleep"],
+};
 
-// })
 const server = supertest(serverInstance);
-describe("Testing GET all users request", () => {
+
+describe("GET all users request", () => {
   afterAll((done) => {
     runningServer.close();
     done();
   });
 
-  it("get all users", async () => {
+  it("should response with code 200", async () => {
+    await server.get("/api/users").then((response) => {
+      expect(response.statusCode).toBe(200);
+    });
+  });
+  it("should return []", async () => {
     await server.get("/api/users").then((response) => {
       expect(response.body).toEqual([]);
     });
-
-    // .on("response", (response) => {
-    //   const respChunkArr: string[] = [];
-    //   response.on("data", (chunk) => {
-    //     respChunkArr.push(chunk);
-    //   });
-    //   response.on("end", () => {
-    //     expect(response.statusCode).toBe(200);
-    //     expect(respChunkArr.join("")).toBe("[]");
-    //   });
-    // })
-    // .end();
-    // request(app)
-    //   .get("http://localhost:8000/api/users")
-    //   .then((response) => {
-    //     expect(response.statusCode).toBe(200);
-    //     expect(response.body).toBe("[s]");
-    //   })
-    //   .catch((e) => {});
-    // server
-    //   .get("http://localhost:8000/api/users", async (response) => {
-    //     const respJSON = await response.json();
-    //   })
-    //   .end(() => serverInstance.close());
-    // expect(response.statusCode).toBe(210);
-  });
-  it("get all users2", async () => {
-    // server
-    //   .get("http://localhost:8000/api/users", (response) => {
-    //     expect(response.statusCode).toBe(200);
-    //   })
-    //   .end(() => serverInstance.close());
-    // expect(response.statusCode).toBe(210);
   });
 });
-//   await it("respond with correst status and data", async () => {
-//     http.get(`http://localhost:${PORT}`, async (res) => {
-//       request(server).get("api/userssds", (response) => {
-//         expect(response.status).toBe(200);
-//         expect(response.body.status).toBe("success");
-//         expect(response.body.message).toBe("[sdsdsdsd");
-//       });
 
-//       //   console.log(response);
-//     });
-//     // const response = await request(server).get("api/users");
-//     // console.log(response);
-//     // .send({
-//     //   title: "How to write a answer",
-//     //   body: "Access the Educative answer tutorial",
-//     // });
+describe("POST new user", () => {
+  afterAll((done) => {
+    runningServer.close();
+    done();
+  });
 
-//     // console.log(response);
-//   });
-// });
+  it("should return correct user data", async () => {
+    await server
+      .post("/api/users")
+      .send(dummyUser)
+      .then((response) => {
+        expect(response.body.username).toBe("Alice");
+        expect(response.body.age).toBe(2);
+        expect(response.body.hobbies).toEqual(["eat", "sleep"]);
+      });
+  });
+  // it("should create valid user id", async () => {
+  //   await server.post("/api/users").send(dummyUser);
+  //   // .then((response) => {
+  //   //   expect(validate(response.body.id)).toBeTruthy();
+  //   // });
+  // });
+});
+
+describe("GET one user", () => {
+  afterAll((done) => {
+    runningServer.close();
+    done();
+  });
+
+  it("should return correct user data", async () => {
+    const createResponse = await server.post("/api/users").send(dummyUser);
+    const id = createResponse.body.id;
+    await server.get(`/api/users/${id}`).then((response) => {
+      expect(response.body.username).toBe(dummyUser.username);
+      expect(response.body.age).toBe(dummyUser.age);
+      expect(response.body.hobbies).toEqual(dummyUser.hobbies);
+    });
+  });
+
+  it("should response with code 400 if is is not valid", async () => {
+    await server.post("/api/users").send(dummyUser);
+    const id = "1111";
+    await server.get(`/api/users/${id}`).then((response) => {
+      expect(response.statusCode).toBe(400);
+    });
+  });
+});

@@ -24,7 +24,7 @@ export const checkIsUserWithIdExist = ({
   const user = usersObject.getOneUser(requestId);
   if (!validate(requestId)) {
     response.statusCode = 400;
-    response.end("ID is not valid");
+    response.end(JSON.stringify("ID is not valid"));
   } else if (!user) {
     response.statusCode = 404;
     response.end("User with this ID does not exist");
