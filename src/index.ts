@@ -13,6 +13,14 @@ import { IUser, IWorkersObj } from "./interfaces";
 config();
 const isMulti = process.argv[2]?.slice(2) === "multi";
 const PORT = process.env.PORT;
+let server: http.Server<
+  typeof http.IncomingMessage,
+  typeof http.ServerResponse
+>;
+let runningServer: http.Server<
+  typeof http.IncomingMessage,
+  typeof http.ServerResponse
+>;
 
 if (cluster?.isPrimary && isMulti) {
   const numCPUs = cpus().length;
@@ -94,7 +102,7 @@ if (cluster?.isPrimary && isMulti) {
     // };
   }
 
-  const server = createServer((request, response) => {
+  server = createServer((request, response) => {
     console.log(workerPort);
     try {
       response.setHeader("Content-Type", "application/json");
@@ -120,32 +128,6 @@ if (cluster?.isPrimary && isMulti) {
       response.end("Error: unexpected server error");
     }
   });
-  const runningServer = server.listen(workerPort);
-  // export { runningServer, server };
+  runningServer = server.listen(workerPort);
 }
-// else {
-//   const server = createServer((request, response) => {
-//     try {
-//       response.setHeader("Content-Type", "application/json");
-//       const { method, url } = request;
-
-//       if (method === "GET") {
-//         return getHandler({ request, response, url });
-//       }
-//       if (method === "POST") {
-//         return postHandler({ request, response, url });
-//       }
-//       if (method === "PUT") {
-//         return putHandler({ request, response, url });
-//       }
-//       if (method === "DELETE") {
-//         return deleteHandler({ request, response, url });
-//       }
-//     } catch (err) {
-//       console.log(err);
-//       response.statusCode = 500;
-//       response.end("Error: unexpected server error");
-//     }
-//   });
-//   const runningServer = server.listen(PORT);
-// }
+export { runningServer, server };
