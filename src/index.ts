@@ -103,7 +103,7 @@ if (cluster?.isPrimary && isMulti) {
   }
 
   server = createServer((request, response) => {
-    console.log(workerPort);
+    // console.log(workerPort);
     try {
       response.setHeader("Content-Type", "application/json");
       const { method, url } = request;
