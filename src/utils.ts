@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { validate } from "uuid";
-import { ICheckIsExistArgs, IGetHandlerArgs } from "./interfaces";
+import { ICheckIsExistArgs } from "./interfaces";
 import usersObject from "./usersObject";
 
 export const checkIsReceivedUserValid = (body: any): boolean => {
@@ -27,7 +27,7 @@ export const checkIsUserWithIdExist = ({
     response.end(JSON.stringify("ID is not valid"));
   } else if (!user) {
     response.statusCode = 404;
-    response.end("User with this ID does not exist");
+    response.end(JSON.stringify("User with this ID does not exist"));
     return false;
   } else {
     return user;
@@ -38,5 +38,5 @@ export const nonExistEndpointHandler = (
   response: ServerResponse<IncomingMessage>
 ) => {
   response.statusCode = 404;
-  response.end("Error: endpoint is not exist");
+  response.end(JSON.stringify("Error: endpoint is not exist"));
 };

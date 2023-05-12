@@ -1,9 +1,6 @@
-import request from "supertest";
 import { server as serverInstance, runningServer } from "../src";
-import { describe, expect, test, it, afterAll, beforeAll } from "@jest/globals";
-import http from "http";
+import { describe, expect, it, afterAll } from "@jest/globals";
 import supertest from "supertest";
-import { validate } from "uuid";
 
 const dummyUser = {
   username: "Alice",
@@ -47,12 +44,15 @@ describe("POST new user", () => {
         expect(response.body.hobbies).toEqual(["eat", "sleep"]);
       });
   });
-  // it("should create valid user id", async () => {
-  //   await server.post("/api/users").send(dummyUser);
-  //   // .then((response) => {
-  //   //   expect(validate(response.body.id)).toBeTruthy();
-  //   // });
-  // });
+
+  it("should response with code 400 if request body does not contain required fields", async () => {
+    await server
+      .post("/api/users")
+      .send({ ...dummyUser, age: "notNumber" })
+      .then((response) => {
+        expect(response.statusCode).toBe(400);
+      });
+  });
 });
 
 describe("GET one user", () => {
@@ -71,7 +71,7 @@ describe("GET one user", () => {
     });
   });
 
-  it("should response with code 400 if is is not valid", async () => {
+  it("should response with code 400 if ID is not valid", async () => {
     await server.post("/api/users").send(dummyUser);
     const id = "1111";
     await server.get(`/api/users/${id}`).then((response) => {

@@ -26,7 +26,7 @@ const postHandler = (props: IGetHandlerArgs) => {
         response.end(JSON.stringify(userData));
       } else {
         response.statusCode = 400;
-        response.end("User should contain all required fields");
+        response.end(JSON.stringify("User should contain all required fields"));
       }
       if (updateUsersCallback) updateUsersCallback(usersObject.getAllUsers());
     });

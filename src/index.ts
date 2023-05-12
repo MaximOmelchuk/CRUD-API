@@ -1,7 +1,7 @@
 import cluster from "node:cluster";
 import http from "node:http";
 import { cpus } from "os";
-import process, { env } from "node:process";
+import process from "node:process";
 import { config } from "dotenv";
 import { createServer } from "http";
 import deleteHandler from "./methods/deleteHandler";
@@ -90,16 +90,12 @@ if (cluster?.isPrimary && isMulti) {
   }).listen(PORT);
 } else {
   const workerPort = process.env.workerPort || PORT;
-  // const isMult = !!process.env.isMult;
   let users: IUser[] | undefined;
   if (isMulti) {
     users = [];
     process.on("message", (message: IUser[]) => {
       users = message;
     });
-  } else {
-    process.on("SIGINT", () => {});
-    // };
   }
 
   server = createServer((request, response) => {
@@ -129,5 +125,10 @@ if (cluster?.isPrimary && isMulti) {
     }
   });
   runningServer = server.listen(workerPort);
+  if (!isMulti) {
+    process.on("SIGINT", () => {
+      server.close();
+    });
+  }
 }
 export { runningServer, server };

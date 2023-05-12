@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --test --loader ts-node/esm ./tests/allUsers.test.ts",
     "start:dev": "npx nodemon",
     "start:prod": "webpack --mode production && node build/bundle.js",
     "start:multi": "npx ts-node --esm ./src/index.ts --multi",
-    "jest": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles"
   },
   "author": "Maksim Amialchuk",
   "license": "ISC",
